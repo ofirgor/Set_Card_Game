@@ -1,6 +1,8 @@
 package bguspl.set.ex;
 
 import bguspl.set.Env;
+import bguspl.set.UserInterface;
+import bguspl.set.UserInterfaceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -106,8 +108,8 @@ public class Table {
             Thread.sleep(env.config.tableDelayMillis);
         } catch (InterruptedException ignored) {}
 
-
         // TODO implement
+        cardToSlot[slot] = null;
     }
 
     /**
@@ -116,6 +118,7 @@ public class Table {
      * @param slot   - the slot on which to place the token.
      */
     public void placeToken(int player, int slot) {
+        env.ui.placeToken(player, slot);
         // TODO implement
     }
 
