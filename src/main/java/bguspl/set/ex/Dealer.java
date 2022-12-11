@@ -2,7 +2,10 @@ package bguspl.set.ex;
 
 import bguspl.set.Env;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -37,12 +40,15 @@ public class Dealer implements Runnable {
      * The time when the dealer needs to reshuffle the deck due to turn timeout.
      */
     private long reshuffleTime = Long.MAX_VALUE;
+    private List<Integer> decklst;
 
     public Dealer(Env env, Table table, Player[] players) {
         this.env = env;
         this.table = table;
         this.players = players;
         deck = IntStream.range(0, env.config.deckSize).boxed().collect(Collectors.toList());
+        decklst = deck;
+        decklst = new ArrayList<Integer>(deck); //copy of the deck
     }
 
     /**
@@ -101,6 +107,16 @@ public class Dealer implements Runnable {
      */
     private void placeCardsOnTable() {
         // TODO implement
+        Collections.shuffle(decklst);
+        int card = 0;
+        for (int i = 0; i < 12; i++) {
+           if (table.cardToSlot[i] == null)
+               card = decklst.get(i);
+               env.ui.placeCard(card, i);
+               decklst.remove(card);
+        }
+
+
     }
 
     /**

@@ -1,5 +1,6 @@
 package bguspl.set.ex;
 
+import java.util.Queue;
 import java.util.logging.Level;
 
 import bguspl.set.Env;
@@ -51,6 +52,8 @@ public class Player implements Runnable {
      * The current score of the player.
      */
     private int score;
+
+
 
     /**
      * The class constructor.
@@ -118,6 +121,9 @@ public class Player implements Runnable {
     public void keyPressed(int slot) {
 
         // TODO implement
+
+        //place or remove a token
+        //need to check if it is the 3rd token placed by the player - if so notify the dealer
     }
 
     /**

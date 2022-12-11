@@ -110,6 +110,7 @@ public class Table {
 
         // TODO implement
         cardToSlot[slot] = null;
+        env.ui.removeCard(slot);
     }
 
     /**
@@ -118,8 +119,10 @@ public class Table {
      * @param slot   - the slot on which to place the token.
      */
     public void placeToken(int player, int slot) {
-        env.ui.placeToken(player, slot);
+
         // TODO implement
+        env.ui.placeToken(player, slot);
+
     }
 
     /**
@@ -130,6 +133,8 @@ public class Table {
      */
     public boolean removeToken(int player, int slot) {
         // TODO implement
+
+        env.ui.removeToken(player,slot);
         return false;
     }
 }
