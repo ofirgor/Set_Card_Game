@@ -15,3 +15,83 @@
 [2022-12-14 19:01:26] [SEVERE ] placing card 21 in slot 9
 [2022-12-14 19:01:26] [SEVERE ] placing card 70 in slot 10
 [2022-12-14 19:01:26] [SEVERE ] placing card 79 in slot 11
+[2022-12-14 19:02:26] [SEVERE ] removing card from slot 0
+[2022-12-14 19:02:26] [SEVERE ] removing card from slot 1
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 2
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 3
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 4
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 5
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 6
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 7
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 8
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 9
+[2022-12-14 19:02:27] [SEVERE ] removing card from slot 10
+[2022-12-14 19:02:28] [SEVERE ] removing card from slot 11
+[2022-12-14 19:02:28] [SEVERE ] placing card 19 in slot 0
+[2022-12-14 19:02:28] [SEVERE ] placing card 25 in slot 1
+[2022-12-14 19:02:28] [SEVERE ] placing card 44 in slot 2
+[2022-12-14 19:02:28] [SEVERE ] placing card 71 in slot 3
+[2022-12-14 19:02:28] [SEVERE ] placing card 26 in slot 4
+[2022-12-14 19:02:28] [SEVERE ] placing card 3 in slot 5
+[2022-12-14 19:02:28] [SEVERE ] placing card 37 in slot 6
+[2022-12-14 19:02:28] [SEVERE ] placing card 57 in slot 7
+[2022-12-14 19:02:29] [SEVERE ] placing card 68 in slot 8
+[2022-12-14 19:02:29] [SEVERE ] placing card 15 in slot 9
+[2022-12-14 19:02:29] [SEVERE ] placing card 2 in slot 10
+[2022-12-14 19:02:29] [SEVERE ] placing card 8 in slot 11
+[2022-12-14 19:02:44] [SEVERE ] Key 68 was pressed by player 0
+[2022-12-14 19:02:44] [SEVERE ] player 0 placing token on slot 6
+[2022-12-14 19:02:44] [SEVERE ] Key 90 was pressed by player 0
+[2022-12-14 19:02:44] [SEVERE ] player 0 placing token on slot 8
+[2022-12-14 19:03:00] [SEVERE ] Key 74 was pressed by player 1
+[2022-12-14 19:03:00] [SEVERE ] player 1 placing token on slot 4
+[2022-12-14 19:03:03] [SEVERE ] Key 76 was pressed by player 1
+[2022-12-14 19:03:03] [SEVERE ] player 1 placing token on slot 6
+[2022-12-14 19:03:29] [SEVERE ] removing card from slot 0
+[2022-12-14 19:03:29] [SEVERE ] removing card from slot 1
+[2022-12-14 19:03:29] [SEVERE ] removing card from slot 2
+[2022-12-14 19:03:29] [SEVERE ] removing card from slot 3
+[2022-12-14 19:03:29] [SEVERE ] removing card from slot 4
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 5
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 6
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 7
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 8
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 9
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 10
+[2022-12-14 19:03:30] [SEVERE ] removing card from slot 11
+[2022-12-14 19:03:30] [SEVERE ] placing card 61 in slot 0
+[2022-12-14 19:03:30] [SEVERE ] placing card 75 in slot 1
+[2022-12-14 19:03:30] [SEVERE ] placing card 2 in slot 2
+[2022-12-14 19:03:31] [SEVERE ] placing card 35 in slot 3
+[2022-12-14 19:03:31] [SEVERE ] placing card 19 in slot 4
+[2022-12-14 19:03:31] [SEVERE ] placing card 66 in slot 5
+[2022-12-14 19:03:31] [SEVERE ] placing card 10 in slot 6
+[2022-12-14 19:03:31] [SEVERE ] placing card 8 in slot 7
+[2022-12-14 19:03:31] [SEVERE ] placing card 9 in slot 8
+[2022-12-14 19:03:31] [SEVERE ] placing card 4 in slot 9
+[2022-12-14 19:03:31] [SEVERE ] placing card 27 in slot 10
+[2022-12-14 19:03:31] [SEVERE ] placing card 62 in slot 11
+[2022-12-14 19:03:33] [SEVERE ] Key 75 was pressed by player 1
+[2022-12-14 19:03:33] [SEVERE ] player 1 placing token on slot 5
+[2022-12-14 19:03:33] [SEVERE ] setting player 1 freeze to 3000
+[2022-12-14 19:03:33] [SEVERE ] Key 75 was pressed by player 1
+[2022-12-14 19:03:33] [SEVERE ] Key 83 was pressed by player 0
+[2022-12-14 19:03:33] [SEVERE ] player 0 placing token on slot 5
+[2022-12-14 19:03:33] [SEVERE ] setting player 1 freeze to 2515
+[2022-12-14 19:03:34] [SEVERE ] Key 76 was pressed by player 1
+[2022-12-14 19:03:34] [SEVERE ] Key 83 was pressed by player 0
+[2022-12-14 19:03:34] [SEVERE ] Key 76 was pressed by player 1
+[2022-12-14 19:03:34] [SEVERE ] setting player 1 freeze to 1549
+[2022-12-14 19:03:35] [SEVERE ] setting player 1 freeze to 590
+[2022-12-14 19:03:36] [SEVERE ] Key 76 was pressed by player 1
+[2022-12-14 19:03:36] [INFO   ] Only 3 action in a time
+[2022-12-14 19:03:36] [SEVERE ] setting player 1 freeze to 0
+[2022-12-14 19:03:36] [SEVERE ] removing player 1 token from slot 5
+[2022-12-14 19:03:36] [SEVERE ] removing player 1 token from slot 6
+[2022-12-14 19:03:36] [SEVERE ] player 1 placing token on slot 6
+[2022-12-14 19:03:36] [SEVERE ] setting player 0 freeze to 3000
+[2022-12-14 19:03:37] [SEVERE ] setting player 0 freeze to 2041
+[2022-12-14 19:03:38] [SEVERE ] setting player 0 freeze to 1079
+[2022-12-14 19:03:39] [SEVERE ] setting player 0 freeze to 121
+[2022-12-14 19:03:40] [SEVERE ] setting player 0 freeze to 0
+[2022-12-14 19:03:40] [SEVERE ] removing player 0 token from slot 5
