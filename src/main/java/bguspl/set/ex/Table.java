@@ -91,12 +91,15 @@ public class Table {
     public void placeCard(int card, int slot) {
         try {
             Thread.sleep(env.config.tableDelayMillis);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
 
         cardToSlot[card] = slot;
         slotToCard[slot] = card;
 
         // TODO implement
+
+        env.ui.placeCard(card, slot);
     }
 
     /**
@@ -109,8 +112,11 @@ public class Table {
         } catch (InterruptedException ignored) {}
 
         // TODO implement
-        cardToSlot[slot] = null;
-        env.ui.removeCard(slot);
+       int cardToRemove = slotToCard[slot];
+       slotToCard[slot] = null;
+       cardToSlot[cardToRemove] = null;
+       env.ui.removeCard(slot);
+
     }
 
     /**
@@ -133,8 +139,7 @@ public class Table {
      */
     public boolean removeToken(int player, int slot) {
         // TODO implement
-
         env.ui.removeToken(player,slot);
-        return false;
+        return true;
     }
 }
