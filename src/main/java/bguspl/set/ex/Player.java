@@ -179,7 +179,7 @@ public class Player implements Runnable {
 
         int ignored = table.countCards(); // this part is just for demonstration in the unit tests
         env.ui.setScore(id, ++score);
-        this.score +=1;
+        //this.score +=1;
         try {
             Thread.sleep(env.config.pointFreezeMillis);
         } catch (InterruptedException e) {}

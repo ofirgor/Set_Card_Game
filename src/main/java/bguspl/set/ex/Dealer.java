@@ -115,45 +115,42 @@ public class Dealer implements Runnable {
             }
             synchronized (player) {
                 int[] cards = new int[3];
-                for (int i = 0; i < currPlayerTokens.length; i++)
-                    cards[i] = table.slotToCard[currPlayerTokens[i]];
-                List<Player> playersToRemoveFromQ = new ArrayList<>();
-                if (env.util.testSet(cards)) {
-                    player.point();
-                    //removes all tokens from the cards
-                    for (Player p:players) {
-                        for (int i = 0; i < p.tokens.length; i++) {
-                            for (int j = 0; j < currPlayerTokens.length; j++) {
-                                if (p.tokens[i] == currPlayerTokens[j]) {
-                                    playersToRemoveFromQ.add(p);
-                                    table.removeToken(p.id,p.tokens[i]);
-                                    p.tokens[i] = -1;
-                                }
-
-                            }
+                boolean flag = true;
+                for (int i = 0; i < currPlayerTokens.length; i++) {
+                    if (currPlayerTokens[i] == -1) {
+                        player.notifyAll();
+                        flag = false;
+                        break;
+                    } else
+                        cards[i] = table.slotToCard[currPlayerTokens[i]];
+                }
+                if (flag) {
+                    if (env.util.testSet(cards)) {
+                        player.point();
+                        //removes all tokens from the cards
+                        for (Player p : players)
+                            for (int i = 0; i < p.tokens.length; i++)
+                                for (int j = 0; j < currPlayerTokens.length; j++)
+                                    if (p.tokens[i] == currPlayerTokens[j]) {
+                                        //playersToRemoveFromQ.add(p);
+                                        table.removeToken(p.id, p.tokens[i]);
+                                        p.tokens[i] = -1;
+                                    }
+                        //remove the cards from the table
+                        for (int i = 0; i < cards.length; i++) {
+                            table.cardToSlot[cards[i]] = null;
                         }
-                    }
-                    //remove the cards from the table
-                    for (int i = 0; i < cards.length; i++) {
-                        table.cardToSlot[cards[i]] = null;
-                    }
-                    for (int i = 0; i < currPlayerTokens.length; i++) {
-                        table.slotToCard[currPlayerTokens[i]] = null;
-                    }
-                    reshuffleTime= System.currentTimeMillis() + 60000;
-                    updateTimerDisplay(false);
-                } else
-                    player.penalty();
-                //remove players from the waiting queue
-                for (Player p: playersQ)
-                    if (playersToRemoveFromQ.contains(p)) {
-                        playersQ.remove(p);
-                        playersToRemoveFromQ.remove(p);
-                    }
-                player.notifyAll();
+                        for (int i = 0; i < currPlayerTokens.length; i++) {
+                            table.slotToCard[currPlayerTokens[i]] = null;
+                        }
+                        reshuffleTime = System.currentTimeMillis() + 60000;
+                        updateTimerDisplay(false);
+                    } else
+                        player.penalty();
+                    player.notifyAll();
+                }
             }
         }
-
     }
 
     /**
@@ -216,7 +213,16 @@ public class Dealer implements Runnable {
      */
     private void announceWinners() {
         // TODO implement
+        int maxScore =0;
+        List<Integer> winnersPlayers= new ArrayList<>();
+        for (Player p:players){
+            maxScore = Math.max(p.getScore(), maxScore);
+        }
+        for (Player p:players) {
+            if (p.getScore() == maxScore)
+                winnersPlayers.add(p.id);
+        }
+        int[] winners = winnersPlayers.stream().mapToInt(i -> i).toArray();
+        env.ui.announceWinner(winners);
     }
-
-
 }
