@@ -1,11 +1,9 @@
 package bguspl.set.ex;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
 import java.util.logging.Level;
 import bguspl.set.Env;
+import java.util.Random;
 
 /**
  * This class manages the players' threads and data
@@ -56,8 +54,9 @@ public class Player implements Runnable {
     private int score;
     protected int[] tokens = new int[3];
     private Dealer dealer;
-    private ArrayBlockingQueue<Integer> actionsQ = new ArrayBlockingQueue<Integer>(3);
-
+    protected ArrayBlockingQueue<Integer> actionsQ = new ArrayBlockingQueue<Integer>(3);
+    protected volatile boolean canPlay; //prevent players to place tokens while the dealer places/removes cards
+    protected boolean shouldSleep;
     /**
      * The class constructor.
      *
@@ -74,6 +73,8 @@ public class Player implements Runnable {
         this.human = human;
         this.score = 0;
         this.dealer = dealer;
+        canPlay = false;
+        shouldSleep = false;
         for (int i = 0; i < this.tokens.length; i++)
             this.tokens[i] = -1;
     }
@@ -90,37 +91,43 @@ public class Player implements Runnable {
         while (!terminate) {
             // TODO implement main player loop
             int slot = 0;
-            try {
-                slot = this.actionsQ.take();
-            } catch (InterruptedException ignored) {}
-            boolean existToken = false;
-            //checks if the slot contains a token, if so removes it
-            for (int i = 0; i < this.tokens.length; i++) {
-                if (slot == this.tokens[i]) {
-                    this.tokens[i] = -1;
-                    table.removeToken(this.id, slot);
-                    existToken = true;
-                    break;
+            if (!actionsQ.isEmpty() && canPlay) {
+                try {
+                    slot = this.actionsQ.take();
+                } catch (InterruptedException ignored) {
                 }
-            }
-            //if slot doesn't contain a token then place it
-            if (!existToken){
+                boolean existToken = false;
+                //checks if the slot contains a token, if so removes it
                 for (int i = 0; i < this.tokens.length; i++) {
-                    if (this.tokens[i] == -1) {
-                        this.tokens[i] = slot;
-                        table.placeToken(this.id, slot);
-                        if (i == 2){
-                            synchronized (this) {
-                                dealer.playersQ.add(this);
-                                dealer.dealerThread.interrupt();
-                                while (dealer.playersQ.contains(this)) {
-                                   try {
-                                        wait();
-                                   } catch (InterruptedException ignored){}
+                    if (slot == this.tokens[i]) {
+                        this.tokens[i] = -1;
+                        table.removeToken(this.id, slot);
+                        existToken = true;
+                        break;
+                    }
+                }
+                //if slot doesn't contain a token then place it
+                if (!existToken) {
+                    for (int i = 0; i < this.tokens.length; i++) {
+                        if (this.tokens[i] == -1) {
+                            this.tokens[i] = slot;
+                            table.placeToken(this.id, slot);
+                            if (i == 2) {
+                                synchronized (this) {
+                                    dealer.playersQ.add(this);
+                                    dealer.dealerThread.interrupt();
+                                    while (dealer.playersQ.contains(this)) {
+                                        try {
+                                            wait();
+                                        } catch (InterruptedException ignored) {
+                                        }
+                                    }
+                                    if(shouldSleep)
+                                        penalty();
                                 }
                             }
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -140,8 +147,12 @@ public class Player implements Runnable {
             while (!terminate) {
                 // TODO implement player key press simulator
                 try {
-                    synchronized (this) { wait(); }
+                    synchronized (this) { wait(150); }
                 } catch (InterruptedException ignored) {}
+                Random rand = new Random();
+                int action = rand.nextInt(11);
+                if(!actionsQ.offer(action) && canPlay)
+                    env.logger.info("Only 3 actions at a time");
             }
             env.logger.log(Level.INFO, "Thread " + Thread.currentThread().getName() + " terminated.");
         }, "computer-" + id);
@@ -164,8 +175,7 @@ public class Player implements Runnable {
 
         // TODO implement
        if(!actionsQ.offer(slot))
-           env.logger.info("Only 3 action in a time");
-
+           env.logger.info("Only 3 actions at a time");
     }
 
     /**
@@ -179,7 +189,6 @@ public class Player implements Runnable {
 
         int ignored = table.countCards(); // this part is just for demonstration in the unit tests
         env.ui.setScore(id, ++score);
-        //this.score +=1;
         try {
             Thread.sleep(env.config.pointFreezeMillis);
         } catch (InterruptedException e) {}
@@ -208,13 +217,16 @@ public class Player implements Runnable {
         while (timePenalty > System.currentTimeMillis()){
             env.ui.setFreeze(this.id, timePenalty - System.currentTimeMillis());
             try {
-                Thread.sleep(950);
+                Thread.currentThread().sleep(950);
             } catch (InterruptedException ignored){}
         }
         env.ui.setFreeze(this.id,0);
+        shouldSleep = false;
     }
 
     public int getScore() {
         return score;
     }
+
+
 }

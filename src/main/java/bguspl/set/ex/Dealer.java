@@ -3,8 +3,6 @@ package bguspl.set.ex;
 import bguspl.set.Env;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -40,8 +38,10 @@ public class Dealer implements Runnable {
      * The time when the dealer needs to reshuffle the deck due to turn timeout.
      */
     private long reshuffleTime = Long.MAX_VALUE;
+
     protected Thread dealerThread;
     protected final LinkedBlockingQueue<Player> playersQ = new LinkedBlockingQueue<>();
+    public static final Object lock = new Object();
 
     public Dealer(Env env, Table table, Player[] players) {
         this.env = env;
@@ -79,7 +79,6 @@ public class Dealer implements Runnable {
     private void timerLoop() {
         while (!terminate && System.currentTimeMillis() < reshuffleTime) {
             sleepUntilWokenOrTimeout();
-            table.hints();
             updateTimerDisplay(false);
             removeCardsFromTable();
             placeCardsOnTable();
@@ -107,6 +106,9 @@ public class Dealer implements Runnable {
      */
     private void removeCardsFromTable() {
         // TODO implement
+        for (Player p:players) {
+            p.canPlay =false;
+        }
         if(!playersQ.isEmpty()) {
             Player player = playersQ.remove();
             int[] currPlayerTokens = new int[3];
@@ -115,16 +117,17 @@ public class Dealer implements Runnable {
             }
             synchronized (player) {
                 int[] cards = new int[3];
-                boolean flag = true;
+                boolean needsToBeChecked = true;
                 for (int i = 0; i < currPlayerTokens.length; i++) {
-                    if (currPlayerTokens[i] == -1) {
+                    if (currPlayerTokens[i] == -1) { //token was removed by other player's set
                         player.notifyAll();
-                        flag = false;
+                        needsToBeChecked = false;
                         break;
                     } else
                         cards[i] = table.slotToCard[currPlayerTokens[i]];
                 }
-                if (flag) {
+
+                if (needsToBeChecked) {
                     if (env.util.testSet(cards)) {
                         player.point();
                         //removes all tokens from the cards
@@ -132,7 +135,6 @@ public class Dealer implements Runnable {
                             for (int i = 0; i < p.tokens.length; i++)
                                 for (int j = 0; j < currPlayerTokens.length; j++)
                                     if (p.tokens[i] == currPlayerTokens[j]) {
-                                        //playersToRemoveFromQ.add(p);
                                         table.removeToken(p.id, p.tokens[i]);
                                         p.tokens[i] = -1;
                                     }
@@ -145,9 +147,14 @@ public class Dealer implements Runnable {
                         }
                         reshuffleTime = System.currentTimeMillis() + 60000;
                         updateTimerDisplay(false);
-                    } else
-                        player.penalty();
+                    } else {
+                        player.shouldSleep = true;
+                    }
                     player.notifyAll();
+                    for (Player p: players) {
+                        p.actionsQ.clear();
+                        p.canPlay = true;
+                    }
                 }
             }
         }
@@ -165,6 +172,9 @@ public class Dealer implements Runnable {
                card = deck.remove(0);
                table.placeCard(card, i);
            }
+        }
+        for (Player p:players) {
+            p.canPlay =true;
         }
     }
 
@@ -191,6 +201,9 @@ public class Dealer implements Runnable {
      */
     private void removeAllCardsFromTable() {
         // TODO implement
+        for (Player p:players) {
+            p.canPlay =false;
+        }
        for (Player p:players) {
             for (int i = 0; i < p.tokens.length; i++) {
                 if(p.tokens[i] != -1) {
@@ -198,6 +211,7 @@ public class Dealer implements Runnable {
                     p.tokens[i] = -1;
                 }
             }
+           p.actionsQ.clear();
       }
         for (int i = 0; i < 12; i++) {
             if(table.slotToCard[i] != null) {
@@ -206,6 +220,10 @@ public class Dealer implements Runnable {
             }
         }
         Collections.shuffle(deck);
+
+        for (Player p:players) {
+            p.canPlay =true;
+        }
     }
 
     /**

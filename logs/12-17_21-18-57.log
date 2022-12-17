@@ -1,0 +1,29 @@
+[2022-12-17 21:18:57] [INFO   ] cannot read configuration file config.properties trying from resources.
+[2022-12-17 21:18:57] [INFO   ] configuration file was loaded from resources directory.
+[2022-12-17 21:18:58] [INFO   ] Thread dealer starting.
+[2022-12-17 21:18:58] [INFO   ] Thread 0starting.
+[2022-12-17 21:18:58] [INFO   ] Thread 1starting.
+[2022-12-17 21:18:58] [SEVERE ] placing card 59 in slot 0
+[2022-12-17 21:18:58] [SEVERE ] placing card 68 in slot 1
+[2022-12-17 21:18:58] [SEVERE ] placing card 26 in slot 2
+[2022-12-17 21:18:58] [SEVERE ] placing card 34 in slot 3
+[2022-12-17 21:18:59] [SEVERE ] placing card 57 in slot 4
+[2022-12-17 21:18:59] [SEVERE ] placing card 53 in slot 5
+[2022-12-17 21:18:59] [SEVERE ] placing card 28 in slot 6
+[2022-12-17 21:18:59] [SEVERE ] placing card 3 in slot 7
+[2022-12-17 21:18:59] [SEVERE ] placing card 27 in slot 8
+[2022-12-17 21:18:59] [SEVERE ] placing card 65 in slot 9
+[2022-12-17 21:18:59] [SEVERE ] placing card 63 in slot 10
+[2022-12-17 21:18:59] [SEVERE ] placing card 32 in slot 11
+[2022-12-17 21:19:01] [SEVERE ] Key 87 was pressed by player 0
+[2022-12-17 21:19:01] [SEVERE ] player 0 placing token on slot 1
+[2022-12-17 21:19:01] [SEVERE ] Key 81 was pressed by player 0
+[2022-12-17 21:19:01] [SEVERE ] player 0 placing token on slot 0
+[2022-12-17 21:19:02] [SEVERE ] Key 69 was pressed by player 0
+[2022-12-17 21:19:02] [SEVERE ] player 0 placing token on slot 2
+[2022-12-17 21:19:02] [SEVERE ] setting player 0 freeze to 3000
+[2022-12-17 21:19:02] [SEVERE ] setting player 0 freeze to 2049
+[2022-12-17 21:19:03] [SEVERE ] setting player 0 freeze to 1087
+[2022-12-17 21:19:04] [SEVERE ] setting player 0 freeze to 132
+[2022-12-17 21:19:05] [SEVERE ] setting player 0 freeze to 0
+[2022-12-17 21:19:05] [INFO   ] Thread main terminated.
