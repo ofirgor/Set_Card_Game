@@ -80,6 +80,7 @@ public class Dealer implements Runnable {
         while (!terminate && System.currentTimeMillis() < reshuffleTime) {
             sleepUntilWokenOrTimeout();
             updateTimerDisplay(false);
+            //table.hints();
             removeCardsFromTable();
             placeCardsOnTable();
         }
@@ -90,6 +91,8 @@ public class Dealer implements Runnable {
      */
     public void terminate() {
         // TODO implement
+        terminate = true;
+
     }
 
     /**
@@ -129,7 +132,8 @@ public class Dealer implements Runnable {
 
                 if (needsToBeChecked) {
                     if (env.util.testSet(cards)) {
-                        player.point();
+                        player.sleepPoint = true;
+                        player.notifyAll();
                         //removes all tokens from the cards
                         for (Player p : players)
                             for (int i = 0; i < p.tokens.length; i++)
@@ -148,9 +152,9 @@ public class Dealer implements Runnable {
                         reshuffleTime = System.currentTimeMillis() + 60000;
                         updateTimerDisplay(false);
                     } else {
-                        player.shouldSleep = true;
+                        player.sleepPenalty = true;
+                        player.notifyAll();
                     }
-                    player.notifyAll();
                     for (Player p: players) {
                         p.actionsQ.clear();
                         p.canPlay = true;
@@ -173,8 +177,8 @@ public class Dealer implements Runnable {
                table.placeCard(card, i);
            }
         }
-        for (Player p:players) {
-            p.canPlay =true;
+        for (int i = 0; i < players.length; i++) {
+            players[i].canPlay = true;
         }
     }
 

@@ -56,7 +56,8 @@ public class Player implements Runnable {
     private Dealer dealer;
     protected ArrayBlockingQueue<Integer> actionsQ = new ArrayBlockingQueue<Integer>(3);
     protected volatile boolean canPlay; //prevent players to place tokens while the dealer places/removes cards
-    protected boolean shouldSleep;
+    protected boolean sleepPenalty;
+    protected boolean sleepPoint;
     /**
      * The class constructor.
      *
@@ -74,7 +75,8 @@ public class Player implements Runnable {
         this.score = 0;
         this.dealer = dealer;
         canPlay = false;
-        shouldSleep = false;
+        sleepPenalty = false;
+        sleepPoint = false;
         for (int i = 0; i < this.tokens.length; i++)
             this.tokens[i] = -1;
     }
@@ -112,7 +114,12 @@ public class Player implements Runnable {
                         if (this.tokens[i] == -1) {
                             this.tokens[i] = slot;
                             table.placeToken(this.id, slot);
-                            if (i == 2) {
+                            int countTokens =0;
+                            for (int j = 0; j < tokens.length; j++) {
+                                if (tokens[i] != -1)
+                                    countTokens += 1;
+                            }
+                            if (countTokens == 3){
                                 synchronized (this) {
                                     dealer.playersQ.add(this);
                                     dealer.dealerThread.interrupt();
@@ -122,8 +129,10 @@ public class Player implements Runnable {
                                         } catch (InterruptedException ignored) {
                                         }
                                     }
-                                    if(shouldSleep)
+                                    if(sleepPenalty)
                                         penalty();
+                                    if (sleepPoint)
+                                        point();
                                 }
                             }
                             break;
@@ -146,13 +155,18 @@ public class Player implements Runnable {
             env.logger.log(Level.INFO, "Thread " + Thread.currentThread().getName() + " starting.");
             while (!terminate) {
                 // TODO implement player key press simulator
-                try {
-                    synchronized (this) { wait(150); }
-                } catch (InterruptedException ignored) {}
-                Random rand = new Random();
-                int action = rand.nextInt(11);
-                if(!actionsQ.offer(action) && canPlay)
-                    env.logger.info("Only 3 actions at a time");
+                while (canPlay) {
+                    try {
+                        synchronized (this) {
+                            wait(200);
+                        }
+                    } catch (InterruptedException ignored) {
+                    }
+                    Random rand = new Random();
+                    int action = rand.nextInt(12);
+                    if (!actionsQ.offer(action))
+                        env.logger.info("Only 3 actions at a time");
+                }
             }
             env.logger.log(Level.INFO, "Thread " + Thread.currentThread().getName() + " terminated.");
         }, "computer-" + id);
@@ -164,6 +178,7 @@ public class Player implements Runnable {
      */
     public void terminate() {
         // TODO implement
+        terminate = true;
     }
 
     /**
@@ -186,13 +201,6 @@ public class Player implements Runnable {
      */
     public void point() {
         // TODO implement
-
-        int ignored = table.countCards(); // this part is just for demonstration in the unit tests
-        env.ui.setScore(id, ++score);
-        try {
-            Thread.sleep(env.config.pointFreezeMillis);
-        } catch (InterruptedException e) {}
-
         long timePoint = env.config.pointFreezeMillis;
         timePoint += System.currentTimeMillis();
         while (timePoint > System.currentTimeMillis()){
@@ -204,6 +212,8 @@ public class Player implements Runnable {
             }
         }
         env.ui.setFreeze(this.id,0);
+        int ignored = table.countCards(); // this part is just for demonstration in the unit tests
+        env.ui.setScore(id, ++score);
     }
 
     /**
@@ -221,7 +231,7 @@ public class Player implements Runnable {
             } catch (InterruptedException ignored){}
         }
         env.ui.setFreeze(this.id,0);
-        shouldSleep = false;
+        sleepPenalty = false;
     }
 
     public int getScore() {
